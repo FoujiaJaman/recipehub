@@ -67,3 +67,27 @@ app.listen(port, () => {
       }
     });
 
+    // Get recipes for a specific user
+    app.get('/my-recipes', async (req, res) => {
+      const userEmail = req.query.email;
+      if (!userEmail) {
+        return res.status(400).json({ success: false, message: "Email query parameter is required" });
+      }
+
+      try {
+        const userRecipes = await recipesCollection.find({ userEmail }).toArray();
+        res.status(200).json(userRecipes);
+      } catch (err) {
+        res.status(500).json({ success: false, message: "Failed to get user's recipes", error: err.message });
+      }
+    });
+
+    
+  
+    
+
+    
+
+    
+    
+
