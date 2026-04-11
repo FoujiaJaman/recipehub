@@ -81,6 +81,34 @@ app.listen(port, () => {
         res.status(500).json({ success: false, message: "Failed to get user's recipes", error: err.message });
       }
     });
+    // Add a new recipe
+    app.post('/recipes', async (req, res) => {
+      const recipe = req.body;
+      try {
+        const result = await recipesCollection.insertOne({ ...recipe, likeCount: 0 });
+        res.status(201).json({ success: true, message: 'Recipe added successfully', insertedId: result.insertedId });
+      } catch (err) {
+        res.status(500).json({ success: false, message: 'Failed to add recipe', error: err.message });
+      }
+    });
+    // Like a recipe
+    app.patch('/recipes/:id/like', async (req, res) => {
+      const recipeId = req.params.id;
+      try {
+        const result = await recipesCollection.updateOne(
+          { _id: new ObjectId(recipeId) },
+          { $inc: { likeCount: 1 } }
+        );
+
+        if (result.modifiedCount > 0) {
+          res.json({ success: true, message: "Like count updated." });
+        } else {
+          res.status(404).json({ success: false, message: "Recipe not found." });
+        }
+      } catch (err) {
+        res.status(500).json({ success: false, message: "Failed to update like count", error: err.message });
+      }
+    });
     
 
     
