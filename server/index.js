@@ -30,7 +30,7 @@ async function run() {
     // Health check
     app.get('/', (req, res) => res.send('RecipeHub Server is getting Hotter.'));
 
-   // Get all recipes
+    // Get all recipes
     app.get('/recipes', async (req, res) => {
       try {
         const recipes = await recipesCollection.find().toArray();
@@ -39,21 +39,8 @@ async function run() {
         res.status(500).json({ success: false, message: 'Failed to retrieve recipes', error: err.message });
       }
     });
-    
 
-  } finally {
-    
-  }
-}
-
-run().catch(console.dir);
-
-// Start server
-app.listen(port, () => {
-  console.log(`RecipeHub server is running on port ${port}`);
-});
-
-// Get top 6 recipes by like count
+    // Get top 6 recipes by like count
     app.get('/recipes/top', async (req, res) => {
       try {
         const topRecipes = await recipesCollection
@@ -81,6 +68,7 @@ app.listen(port, () => {
         res.status(500).json({ success: false, message: "Failed to get user's recipes", error: err.message });
       }
     });
+
     // Add a new recipe
     app.post('/recipes', async (req, res) => {
       const recipe = req.body;
@@ -91,6 +79,7 @@ app.listen(port, () => {
         res.status(500).json({ success: false, message: 'Failed to add recipe', error: err.message });
       }
     });
+
     // Like a recipe
     app.patch('/recipes/:id/like', async (req, res) => {
       const recipeId = req.params.id;
@@ -109,6 +98,7 @@ app.listen(port, () => {
         res.status(500).json({ success: false, message: "Failed to update like count", error: err.message });
       }
     });
+
     // Get a recipe by ID
     app.get('/recipes/:id', async (req, res) => {
       const recipeId = req.params.id;
@@ -150,6 +140,7 @@ app.listen(port, () => {
         res.status(500).json({ success: false, message: 'Failed to update recipe', error: err.message });
       }
     });
+
     // Delete a recipe (only by owner)
     app.delete('/recipes/:id', async (req, res) => {
       const recipeId = req.params.id;
@@ -179,15 +170,7 @@ app.listen(port, () => {
 
 run().catch(console.dir);
 
-    
-    
-
-    
-  
-    
-
-    
-
-    
-    
-
+// Start server
+app.listen(port, () => {
+  console.log(`RecipeHub server is running on port ${port}`);
+});
